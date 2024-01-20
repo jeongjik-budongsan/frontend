@@ -5,6 +5,7 @@
 	import { BASE_URL } from '$lib/request.js';
 	import { derived, writable } from 'svelte/store';
 	import type { Agency } from './+page.server.js';
+	import { goto } from '$app/navigation';
 
 	export let data;
 	export let selectedSido = 'none';
@@ -159,7 +160,7 @@
 		<div style="width: 20%; border: 1px solid black;">
 			{#await $agencies then agencies}
 				{#each agencies as agency}
-					<div>
+					<div on:click={() => goto(`/agencies/${agency.id}`)}>
 						{agency.상호}
 					</div>
 				{/each}
