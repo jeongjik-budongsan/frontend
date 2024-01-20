@@ -1,11 +1,9 @@
 import { BASE_URL } from "$lib/request";
+import type { components } from "../types/schema";
 
-interface GeoItem {
-  id: number;
-  sido: string;
-  sigungu: string;
-  dong: string;
-}
+export type GeoItem = components["schemas"]["GeoItem"];
+export type Agency = components["schemas"]["Agency"];
+
 
 export async function load() {
   const response = await fetch(`${BASE_URL}/geo`);
