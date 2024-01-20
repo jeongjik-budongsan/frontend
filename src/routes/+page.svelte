@@ -4,8 +4,8 @@
 	import Geolocation from 'svelte-geolocation';
 	import { BASE_URL } from '$lib/request.js';
 	import { derived, writable } from 'svelte/store';
-	import type { Agency } from './+page.server.js';
 	import { goto } from '$app/navigation';
+	import type { Agency } from '../types/types.js';
 
 	export let data;
 	export let selectedSido = 'none';

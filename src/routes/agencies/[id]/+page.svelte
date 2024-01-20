@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import type { Agency } from '../../+page.server';
+	import type { Agency } from '../../../types/types';
 
 	export let data: Agency;
 </script>

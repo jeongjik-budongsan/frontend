@@ -1,6 +1,6 @@
 import { BASE_URL } from "$lib/request";
 import { error } from "@sveltejs/kit";
-import type { Agency } from "../../+page.server";
+import type { Agency } from "../../../types/types";
 
 export async function load({ params }: { params: { id: string }}) {
   const id = parseInt(params.id);
