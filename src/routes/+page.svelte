@@ -2,11 +2,15 @@
 	import { getDongCoordinates } from '$lib/constants';
 	import { average } from '$lib/util.js';
 	import Geolocation from 'svelte-geolocation';
+	import { BASE_URL } from '$lib/request.js';
+	import { derived, writable } from 'svelte/store';
+	import type { Agency } from './+page.server.js';
+
 	export let data;
 	export let selectedSido = 'none';
 	export let selectedSigungu = 'none';
 	export let selectedDong = 'none';
-	export let selectedGeoId = 0;
+	export let selectedGeoId = writable(0);
 	export let map: any;
 	export let polygon: any;
 
@@ -95,13 +99,23 @@
 	function changeSigungudong(dong?: string) {
 		if (dong === 'none' || !dong) {
 			selectedDong = 'none';
-			selectedGeoId = 0;
+			selectedGeoId.set(0);
 		} else {
 			selectedDong = dong;
-			selectedGeoId =
-				data.addresses[selectedSido][selectedSigungu].find((i: any) => i.dong === dong)?.id ?? 0;
+			selectedGeoId.set(
+				data.addresses[selectedSido][selectedSigungu].find((i: any) => i.dong === dong)?.id ?? 0
+			);
 		}
 	}
+
+	const agencies = derived(selectedGeoId, async (geoId): Promise<Agency[]> => {
+		if (geoId !== 0) {
+			const res = await fetch(`${BASE_URL}/agencies?geo_id=${geoId}`);
+			return await res.json();
+		} else {
+			return [];
+		}
+	});
 </script>
 
 <Geolocation
@@ -140,5 +154,19 @@
 			{/each}
 		</select>
 	{/if}
-	<div id="map" style="width:100%;height:100vh;"></div>
+
+	<div style="display: flex;">
+		<div style="width: 20%; border: 1px solid black;">
+			{#await $agencies then agencies}
+				{#each agencies as agency}
+					<div>
+						{agency.상호}
+					</div>
+				{/each}
+			{:catch error}
+				<div>{error.message}</div>
+			{/await}
+		</div>
+		<div id="map" style="width:80%;height:100vh;"></div>
+	</div>
 </div>
