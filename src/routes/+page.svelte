@@ -132,32 +132,34 @@
 		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3a1dc3e97c24080f22a317630c618d04&autoload=true&libraries=services,clusterer"
 	></script>
 
-	<h1>정직부동산</h1>
+	<div style="padding: 15px 14px;">
+		<h1>정직부동산</h1>
 
-	<select on:change={(e) => changeSido(e.target?.value)} bind:value={selectedSido}>
-		{#each Object.keys(data.addresses) as sido}
-			<option value={sido}>{sido}</option>
-		{/each}
-	</select>
-
-	{#if selectedSido != 'none'}
-		<select on:change={(e) => changeSigungu(e.target?.value)} bind:value={selectedSigungu}>
-			{#each Object.keys(data.addresses[selectedSido]) as sigungu}
-				<option value={sigungu}>{sigungu}</option>
+		<select on:change={(e) => changeSido(e.target?.value)} bind:value={selectedSido}>
+			{#each Object.keys(data.addresses) as sido}
+				<option value={sido}>{sido}</option>
 			{/each}
 		</select>
-	{/if}
 
-	{#if selectedSigungu != 'none'}
-		<select on:change={(e) => changeSigungudong(e.target?.value)} bind:value={selectedDong}>
-			{#each data.addresses[selectedSido][selectedSigungu] as dong}
-				<option value={dong.dong}>{dong.dong}</option>
-			{/each}
-		</select>
-	{/if}
+		{#if selectedSido != 'none'}
+			<select on:change={(e) => changeSigungu(e.target?.value)} bind:value={selectedSigungu}>
+				{#each Object.keys(data.addresses[selectedSido]) as sigungu}
+					<option value={sigungu}>{sigungu}</option>
+				{/each}
+			</select>
+		{/if}
+
+		{#if selectedSigungu != 'none'}
+			<select on:change={(e) => changeSigungudong(e.target?.value)} bind:value={selectedDong}>
+				{#each data.addresses[selectedSido][selectedSigungu] as dong}
+					<option value={dong.dong}>{dong.dong}</option>
+				{/each}
+			</select>
+		{/if}
+	</div>
 
 	<div style="display: flex;">
-		<div style="width: 20%; border: 1px solid black;">
+		<div style="width: 20%; border: 1px solid black; overflow-y: scroll;">
 			{#await $agencies then agencies}
 				{#each agencies as agency}
 					<div on:click={() => goto(`/agencies/${agency.id}`)}>
@@ -168,6 +170,6 @@
 				<div>{error.message}</div>
 			{/await}
 		</div>
-		<div id="map" style="width:80%;height:100vh;"></div>
+		<div id="map" style="width:80%;height:80vh;"></div>
 	</div>
 </div>
