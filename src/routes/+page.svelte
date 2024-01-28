@@ -126,6 +126,16 @@
 	}}
 />
 
+<style>
+	select {
+		background : #2a2f3b;
+		color : #fff;
+		border-radius: 0.5em;
+		padding: 1em;
+	}
+</style>
+
+
 <div>
 	<script
 		type="text/javascript"
