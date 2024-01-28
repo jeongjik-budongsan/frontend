@@ -1,4 +1,4 @@
-import type { components } from "./schema";
+import type { Database } from "../supabase/database.types";
 
-export type GeoItem = components["schemas"]["GeoItem"];
-export type Agency = components["schemas"]["Agency"];
+export type GeoItem = Database['public']['Tables']["geo"]['Row'];
+export type Agency = Database['public']['Tables']["agency"]['Row'];
