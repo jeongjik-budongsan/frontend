@@ -1,10 +1,10 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { getDongCoordinates } from '$lib/constants';
 	import { average } from '$lib/util.js';
 	import Geolocation from 'svelte-geolocation';
-	import { BASE_URL } from '$lib/request.js';
 	import { derived, writable } from 'svelte/store';
-	import { goto } from '$app/navigation';
+	import { supabase } from '../supabase/index.js';
 	import type { Agency } from '../types/types.js';
 
 	export let data;
@@ -111,8 +111,8 @@
 
 	const agencies = derived(selectedGeoId, async (geoId): Promise<Agency[]> => {
 		if (geoId !== 0) {
-			const res = await fetch(`${BASE_URL}/agencies?geo_id=${geoId}`);
-			return await res.json();
+			const res = await supabase.from('agency').select('*').eq('geo_id', geoId);
+			return res.data || [];
 		} else {
 			return [];
 		}
@@ -143,7 +143,7 @@
 
 		{#if selectedSido != 'none'}
 			<select on:change={(e) => changeSigungu(e.target?.value)} bind:value={selectedSigungu}>
-				{#each Object.keys(data.addresses[selectedSido]) as sigungu}
+				{#each Object.keys(data.addresses[selectedSido] || {}) as sigungu}
 					<option value={sigungu}>{sigungu}</option>
 				{/each}
 			</select>

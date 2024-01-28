@@ -1,17 +1,18 @@
-import { BASE_URL } from "$lib/request";
 import { error } from "@sveltejs/kit";
-import type { Agency } from "../../../types/types";
+import { supabase } from "../../../supabase";
 
 export async function load({ params }: { params: { id: string }}) {
   const id = parseInt(params.id);
-  const response = await fetch(`${BASE_URL}/agencies/${id}`);
-  if (response.ok) {
-    const agency: Agency = await response.json();
-    return agency;
+  const res = await supabase.from('agency').select('*, reviews(*)').eq('id', id);
+  if (res.data && res.data.length > 0) {
+    const agency = res.data[0];
+    return {...agency, review: {
+      items: agency.reviews,
+      average: agency.reviews.reduce((acc, cur) => acc + cur.point, 0) / agency.reviews.length,
+    }};
   } else {
-    const msg = await response.json()
-    throw error(response.status, {
-      message: msg.detail,
+    throw error(404, {
+      message: 'not found',
     });
     
   }

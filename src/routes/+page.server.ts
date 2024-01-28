@@ -1,11 +1,10 @@
-import { BASE_URL } from "$lib/request";
+import { supabase } from "../supabase";
 import type { GeoItem } from "../types/types";
 
 export async function load() {
-  const response = await fetch(`${BASE_URL}/geo`);
-  const geo: GeoItem[] = await response.json();
+  const geo = await supabase.from('geo').select('*');
 
-  const addresses = geo.reduce((acc, cur) => {
+  const addresses = geo.data!.reduce((acc, cur) => {
     if (!acc[cur.sido]) {
       acc[cur.sido] = {};
     }

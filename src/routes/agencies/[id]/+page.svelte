@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import type { Agency } from '../../../types/types';
 
-	export let data: Agency;
+	export let data;
 </script>
 
 <div>
